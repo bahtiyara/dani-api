@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
@@ -32,13 +33,24 @@ app.get('/questions/:id', (req, res) => {
     });
 });
 
-// For detail.html updating data
-// app.post('/questions/:id', (req, res) => {
-//     let id = req.params.id;
-//     if (!ObjectID.isValid(id)) {
-//         return res.status(404).send();
-//     }
-// });
+// For detail.html updating data {title, desc, answers-add, answers-delete}
+app.patch('/questions/:id', (req, res) => {
+    let id = req.params.id;
+    let body = _.pick(req.body, ['title', 'desc', 'answers']);
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+
+    Question.findByIdAndUpdate(id, {$set: body}, {new: true}).then((question) => {
+        if (!question) {
+            return res.status(404).send();
+        }
+        res.send(question);
+    }, (e) => {
+        res.status(400).send();
+    });
+});
 
 // For detail.html deleting data
 app.delete('/questions/:id', (req, res) => {
