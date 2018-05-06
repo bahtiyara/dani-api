@@ -18,13 +18,35 @@ app.get('/', (req, res) => {
     });
 });
 
-// For detail.html
+// For detail.html fetching data
 app.get('/questions/:id', (req, res) => {
     let id = req.params.id;
     if (!ObjectID.isValid(id)) {
         return res.status(404).send();
     }
     Question.findById(id).then((question) => {
+        if (!question) {
+            return res.status(404).send();
+        }
+        res.send(question);
+    });
+});
+
+// For detail.html updating data
+// app.post('/questions/:id', (req, res) => {
+//     let id = req.params.id;
+//     if (!ObjectID.isValid(id)) {
+//         return res.status(404).send();
+//     }
+// });
+
+// For detail.html deleting data
+app.delete('/questions/:id', (req, res) => {
+    let id = req.params.id;
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+    Question.findByIdAndRemove(id).then((question) => {
         if (!question) {
             return res.status(404).send();
         }
