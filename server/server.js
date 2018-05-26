@@ -70,7 +70,8 @@ app.delete('/questions/:id', (req, res) => {
 app.post('/questions', (req, res) => {
     var question = new Question({
         title: req.body.title,
-        desc: req.body.desc
+        desc: req.body.desc,
+        answers: req.body.answers
     });
     question.save().then((doc) => {
         res.send(doc);
