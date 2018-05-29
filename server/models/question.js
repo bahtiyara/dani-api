@@ -13,7 +13,7 @@ const Question = mongoose.model('Question', {
     },
     answers: {
         type: Array,
-        default: null
+        default: []
     }
 });
 
